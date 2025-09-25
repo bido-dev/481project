@@ -4,6 +4,7 @@ package com.example.swe481.Model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,11 +23,26 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer studentId;
 
+    @NotEmpty(message = "Username must not be empty")
+    @Column(unique = true, nullable = false, length = 50)
+    private String username;
+
     @NotEmpty(message = "Student name must not be empty")
-    private String studentsName;
+    private String studentName;
 
     @Email(message = "Invalid email")
+    @NotEmpty(message = "Email must not be empty")
+    @Column(unique = true, nullable = false)
     private String studentEmail;
+
+    @NotEmpty(message = "Password must not be empty")
+    @Pattern(
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+            message = "Password must be at least 8 characters, include uppercase, lowercase, number, and special character"
+    )
+    @Column(nullable = false)
+    private String password;
+
 
     // Student <-> Major (N:M)  "Search"
     @ManyToMany

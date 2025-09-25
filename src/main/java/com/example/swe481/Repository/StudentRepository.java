@@ -4,4 +4,8 @@ import com.example.swe481.Model.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
+
+    Student findByStudentEmail(String studentEmail);
+
+    Student findByUsername(String username);
 }
