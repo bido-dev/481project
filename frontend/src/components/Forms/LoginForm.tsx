@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({
-        username: '',
+        studentEmail: '',
         password: '',
     });
 
@@ -16,14 +16,14 @@ const LoginForm = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        const params = new URLSearchParams();
+        params.append('email', formData.studentEmail);
+        params.append('password', formData.password);
+
         try {
             // Assuming a login endpoint, you might need to adjust this
-            const response = await fetch('http://localhost:8080/api/v1/student/login', {
+            const response = await fetch(`http://localhost:8080/api/v1/student/login?${params.toString()}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
             });
 
             if (response.ok) {
@@ -33,6 +33,7 @@ const LoginForm = () => {
                 navigate('/');
             } else {
                 const errorText = await response.text();
+                console.error('Login failed:', errorText);
                 alert(`Login failed: ${errorText}`);
             }
         } catch (error) {
@@ -55,10 +56,10 @@ const LoginForm = () => {
                 <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
                 <input
-                    type="text"
-                    name="username"
-                    placeholder="Username"
-                    value={formData.username}
+                    type="email"
+                    name="studentEmail"
+                    placeholder="Student Email"
+                    value={formData.studentEmail}
                     onChange={handleChange}
                     className="w-full mb-4 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-400 hover:ring-1 hover:ring-blue-400"
                     required
